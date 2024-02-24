@@ -11,19 +11,29 @@ app.use(express.json());
 
 const permitRouter = require('./routes/permit');
 const roleRouter = require('./routes/role');
+const userRouter = require('./routes/user');
 
 app.use('/permits', permitRouter);
 app.use('/roles', roleRouter);
+app.use('/users', userRouter);
 
 app.use((err, req, res, next) => {
-    err.status = err.status || 500;
+
+    console.log("Error =>", err);
+    
+    if(typeof(err) === 'string')
+    {
+        err = { "status": 500, "message": err };
+    }
+
    res.status(err.status).json({con: false, msg: err.message});
 })
 
 const defaultData = async () => {
     let migrator = require('./migrations/migrator');
     // migrator.migrate();
-    migrator.backup();
+    // migrator.backup();
+    migrator.rpMigrate();
 }
 
 defaultData();

@@ -1,6 +1,8 @@
 const fs = require('fs');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 const Helper = require('../utils/helper');
 const UserDB = require('../models/user');
+const RoleDB = require('../models/role');
+const PermitDB = require('../models/permit');
 
 const migrate = async () => {
     let data = fs.readFileSync('./migrations/users.json');
@@ -13,6 +15,23 @@ const migrate = async () => {
     });
 }
 
+const rpMigrate = () => {
+    let data = fs.readFileSync('./migrations/rp.json');
+    let rp = JSON.parse(data);
+    console.log("RP =>", rp);
+
+    rp.roles.forEach(async (role) => {
+        let roleResult = await new RoleDB(role).save();
+        console.log("Role =>", roleResult);
+    });
+
+    rp.permits.forEach(async (permit) => {
+        let permitResult = await new PermitDB(permit).save();
+        console.log("Permit =>", permitResult)
+    })
+
+}
+
 const backup = async () => {
     let users = await UserDB.find();
     fs.writeFileSync('./migrations/backups/users.json', JSON.stringify(users));
@@ -22,5 +41,6 @@ const backup = async () => {
 
 module.exports = {
     migrate,
+    rpMigrate,
     backup,
 }

@@ -1,6 +1,20 @@
 const Joi = require('joi');
 
 module.exports = {
+
+    UserSchema: {
+        register: Joi.object({
+            name: Joi.string().min(5).required(),
+            email: Joi.string().email().required(),
+            phone: Joi.string().min(7).max(11).required(),
+            password: Joi.string().min(8).required()
+        }),
+        login: Joi.object({
+            phone: Joi.string().min(7).max(11).required(),
+            password: Joi.string().min(8).required()
+        }),
+    },
+
     PermitSchema: {
         add: Joi.object({
             name: Joi.string().required()
