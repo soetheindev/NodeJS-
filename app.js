@@ -33,7 +33,8 @@ const defaultData = async () => {
     let migrator = require('./migrations/migrator');
     // migrator.migrate();
     // migrator.backup();
-    migrator.rpMigrate();
+    // migrator.rpMigrate();
+    migrator.addOwnerRole();
 }
 
 defaultData();

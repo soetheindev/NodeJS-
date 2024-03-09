@@ -29,7 +29,13 @@ const rpMigrate = () => {
         let permitResult = await new PermitDB(permit).save();
         console.log("Permit =>", permitResult)
     })
+}
 
+const addOwnerRole = async () => {
+    let dbOwner = await UserDB.findOne({ phone: "09100100100" });
+    let ownerRole = await RoleDB.findOne({ name: "Owner"  });
+
+    await UserDB.findByIdAndUpdate(dbOwner._id, { $push: { roles: ownerRole._id } });
 }
 
 const backup = async () => {
@@ -43,4 +49,5 @@ module.exports = {
     migrate,
     rpMigrate,
     backup,
+    addOwnerRole,
 }
